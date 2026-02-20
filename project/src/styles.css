@@ -107,7 +107,7 @@ body {
     padding: 2.5rem;
     width: 100%;
     max-width: 800px;
-    animation: fadeUp .4s ease both;
+    animation: fadeUp .45s cubic-bezier(.22, 1, .36, 1) both;
     transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
 }
 
@@ -139,13 +139,13 @@ h2 {
 .btn-primary {
     background: var(--blue);
     color: #fff;
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 0 12px rgba(79, 142, 247, .2);
 }
 
 .btn-primary:hover:not(:disabled) {
     background: var(--blue-dark);
     transform: translateY(-2px);
-    box-shadow: 0 0 24px rgba(79, 142, 247, .5);
+    box-shadow: 0 0 18px rgba(79, 142, 247, .3);
 }
 
 .btn-secondary {
@@ -174,6 +174,18 @@ h2 {
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none;
+}
+
+[data-theme="light"] .btn-secondary {
+    background: #e8ecf2;
+    color: #1e293b;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-theme="light"] .btn-secondary:disabled {
+    background: #e8ecf2;
+    color: #475569;
+    opacity: .6;
 }
 
 /* ── Status Card ──────────────────────────────────────────── */
@@ -310,7 +322,7 @@ h2 {
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    animation: fadeUp .35s ease both;
+    animation: fadeUp .45s cubic-bezier(.22, 1, .36, 1) both;
 }
 
 .preview-video {
@@ -342,6 +354,19 @@ h2 {
     font-size: .72rem;
     font-weight: 600;
     letter-spacing: .02em;
+    animation: tagSlideIn .3s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes tagSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .pulse-dot {
@@ -353,27 +378,40 @@ h2 {
     flex-shrink: 0;
 }
 
-/* ── Fullscreen Button ───────────────────────────────────── */
 .fullscreen-btn {
     position: absolute;
     bottom: .75rem;
     right: .75rem;
-    background: rgba(0, 0, 0, .55);
+    background: rgba(0, 0, 0, .45);
     backdrop-filter: blur(6px);
     color: #fff;
     border: none;
-    padding: .35rem .55rem;
-    border-radius: 6px;
+    padding: .4rem .6rem;
+    border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
     z-index: 10;
     line-height: 1;
-    transition: background .15s ease, transform .15s ease;
+    opacity: 0;
+    transition: opacity .25s ease, background .2s ease, transform .2s ease;
+}
+
+.preview-wrapper:hover .fullscreen-btn {
+    opacity: 1;
 }
 
 .fullscreen-btn:hover {
     background: rgba(0, 0, 0, .75);
-    transform: scale(1.1);
+    transform: scale(1.08);
+}
+
+.fullscreen-btn--active {
+    opacity: 1;
+    background: rgba(79, 142, 247, .6);
+}
+
+.fullscreen-btn--active:hover {
+    background: rgba(79, 142, 247, .8);
 }
 
 /* ── Loading Spinner ──────────────────────────────────────── */
@@ -469,18 +507,18 @@ h2 {
 
 /* ── CTA Pulse ────────────────────────────────────────────── */
 .btn-pulse {
-    animation: ctaPulse 2.5s ease-in-out infinite;
+    animation: ctaPulse 3s ease-in-out infinite;
 }
 
 @keyframes ctaPulse {
 
     0%,
     100% {
-        box-shadow: var(--shadow-glow);
+        box-shadow: 0 0 10px rgba(79, 142, 247, .15);
     }
 
     50% {
-        box-shadow: 0 0 32px rgba(79, 142, 247, .65);
+        box-shadow: 0 0 20px rgba(79, 142, 247, .25);
     }
 }
 
@@ -1073,19 +1111,26 @@ kbd {
     font-family: var(--font);
     font-size: .85rem;
     font-weight: 600;
-    color: var(--blue);
-    background: var(--trust-chip-bg);
-    border: 1px solid var(--trust-chip-border);
-    padding: .45rem 1rem;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: .4rem 1rem;
     border-radius: 10px;
     cursor: pointer;
     transition: all .15s ease;
+    text-decoration: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .login-demo-btn:hover {
-    background: rgba(79, 142, 247, .15);
-    border-color: rgba(79, 142, 247, .3);
-    transform: translateY(-1px);
+    color: var(--text);
+    background: var(--btn-secondary-hover);
+    border-color: var(--border);
+}
+
+.login-demo-btn:active {
+    transform: scale(.97);
 }
 
 .login-back-link {

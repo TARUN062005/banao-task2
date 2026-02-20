@@ -4,13 +4,23 @@ export default function ScreenPreview({ stream }) {
     const videoRef = useRef(null);
     const wrapperRef = useRef(null);
     const [meta, setMeta] = useState({ resolution: null, surface: null });
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const isSameScreen = meta.surface === 'monitor' || meta.surface === 'browser';
 
     const toggleFullscreen = useCallback(() => {
+        if (!wrapperRef.current) return;
         if (document.fullscreenElement) {
             document.exitFullscreen();
         } else {
-            wrapperRef.current?.requestFullscreen?.();
+            wrapperRef.current.requestFullscreen?.();
         }
+    }, []);
+
+    useEffect(() => {
+        const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', onFsChange);
+        return () => document.removeEventListener('fullscreenchange', onFsChange);
     }, []);
 
     useEffect(() => {
@@ -62,13 +72,15 @@ export default function ScreenPreview({ stream }) {
                     </span>
                 )}
             </div>
-            <button
-                className="fullscreen-btn"
-                onClick={toggleFullscreen}
-                aria-label="Toggle fullscreen preview"
-            >
-                ⛶
-            </button>
+            {!isSameScreen && (
+                <button
+                    className={`fullscreen-btn${isFullscreen ? ' fullscreen-btn--active' : ''}`}
+                    onClick={toggleFullscreen}
+                    aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                >
+                    {isFullscreen ? '⤓' : '⛶'}
+                </button>
+            )}
         </div>
     );
 }
