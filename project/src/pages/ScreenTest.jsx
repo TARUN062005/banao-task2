@@ -38,9 +38,11 @@ export default function ScreenTest() {
 
                 <StatusCard status={status} error={error} stream={stream} />
 
-                {status === 'granted' && stream && (
-                    <ScreenPreview stream={stream} />
-                )}
+                <div className="preview-slot">
+                    {status === 'granted' && stream && (
+                        <ScreenPreview stream={stream} />
+                    )}
+                </div>
 
                 <div className="action-row">
                     {status === 'idle' && (
@@ -107,11 +109,11 @@ export default function ScreenTest() {
                     )}
                 </div>
 
-                {status !== 'granted' && status !== 'requesting' && (
-                    <p className="privacy-note" aria-label="Privacy assurance">
-                        🔒 Nothing is recorded or transmitted. Preview is local only.
-                    </p>
-                )}
+                <p className="privacy-note" aria-label="Privacy assurance">
+                    {status !== 'granted' && status !== 'requesting'
+                        ? '🔒 Nothing is recorded or transmitted. Preview is local only.'
+                        : '\u00A0'}
+                </p>
             </div>
         </div>
     );

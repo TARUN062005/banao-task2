@@ -27,7 +27,7 @@
 }
 
 body {
-    font-family: var(--font);
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     background-color: var(--bg);
     color: var(--text);
     line-height: 1.6;
@@ -160,6 +160,7 @@ p {
     border-radius: var(--radius);
     text-align: center;
     margin-bottom: 1.5rem;
+    min-height: 140px;
 }
 
 .status-badge {
@@ -246,6 +247,20 @@ p {
 }
 
 /* ── Video Preview ────────────────────────────────────────── */
+.preview-slot {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-slot:has(.preview-wrapper) {
+    aspect-ratio: 16 / 9;
+    min-height: 220px;
+    margin-bottom: 1.5rem;
+}
+
 .preview-wrapper {
     position: relative;
     width: 100%;
@@ -254,7 +269,6 @@ p {
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    margin-bottom: 1.5rem;
     animation: fadeUp .35s ease both;
 }
 
@@ -326,6 +340,8 @@ p {
     align-items: center;
     justify-content: center;
     margin-top: 1.5rem;
+    min-height: 52px;
+    transition: opacity .2s ease;
 }
 
 /* ── Unsupported Banner ───────────────────────────────────── */
