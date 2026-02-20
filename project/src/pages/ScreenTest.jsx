@@ -16,10 +16,13 @@ export default function ScreenTest() {
         startSharing();
     }, [reset, startSharing]);
 
-    // Keyboard accessibility: Enter/Space triggers start from idle
+    // Keyboard: Enter on idle triggers start — only when no interactive element is focused
     useEffect(() => {
+        const INTERACTIVE = ['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'A'];
         const onKey = (e) => {
-            if (status === 'idle' && (e.key === 'Enter' || e.key === ' ')) {
+            if (status !== 'idle') return;
+            if (INTERACTIVE.includes(document.activeElement?.tagName)) return;
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 startSharing();
             }
@@ -27,18 +30,6 @@ export default function ScreenTest() {
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
     }, [status, startSharing]);
-
-    // Block accidental browser-back while picker is open
-    useEffect(() => {
-        if (status !== 'requesting') return;
-        const onPopState = (e) => {
-            e.preventDefault();
-            window.history.pushState(null, '', window.location.href);
-        };
-        window.history.pushState(null, '', window.location.href);
-        window.addEventListener('popstate', onPopState);
-        return () => window.removeEventListener('popstate', onPopState);
-    }, [status]);
 
     return (
         <div className="container">

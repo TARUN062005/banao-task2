@@ -29,7 +29,7 @@ const STATUS_CONFIG = {
     error: {
         label: 'Error',
         badgeClass: 'error',
-        message: null, // dynamic
+        message: null,
     },
     ended: {
         label: 'Session Ended',

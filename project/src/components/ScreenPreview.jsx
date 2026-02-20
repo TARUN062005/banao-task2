@@ -20,7 +20,6 @@ export default function ScreenPreview({ stream }) {
                 surface: settings.displaySurface ?? null,
             });
         } else {
-            // Explicitly release video element resource
             video.srcObject = null;
         }
 

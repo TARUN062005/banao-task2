@@ -1,8 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 
-// Status values (spec-exact):
-// idle | requesting | granted | denied | cancelled | error | ended | unsupported
-
 export const useScreenShare = () => {
     const [stream, setStream] = useState(null);
     const [status, setStatus] = useState("idle");
@@ -25,7 +22,6 @@ export const useScreenShare = () => {
         cleanup();
         setError(null);
 
-        // Guard first — before touching status
         if (!navigator.mediaDevices?.getDisplayMedia) {
             setStatus("unsupported");
             return;
@@ -41,7 +37,6 @@ export const useScreenShare = () => {
 
             const videoTrack = mediaStream.getVideoTracks()[0];
 
-            // Detect browser-toolbar "Stop sharing" click
             videoTrack.onended = () => {
                 cleanup();
                 setStatus("ended");
@@ -87,7 +82,6 @@ export const useScreenShare = () => {
         setError(null);
     }, [cleanup]);
 
-    // Release all resources when component unmounts
     useEffect(() => {
         return cleanup;
     }, [cleanup]);
