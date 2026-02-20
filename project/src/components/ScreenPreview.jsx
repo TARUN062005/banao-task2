@@ -1,8 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 export default function ScreenPreview({ stream }) {
     const videoRef = useRef(null);
+    const wrapperRef = useRef(null);
     const [meta, setMeta] = useState({ resolution: null, surface: null });
+
+    const toggleFullscreen = useCallback(() => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            wrapperRef.current?.requestFullscreen?.();
+        }
+    }, []);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -31,7 +40,7 @@ export default function ScreenPreview({ stream }) {
     if (!stream) return null;
 
     return (
-        <div className="preview-wrapper">
+        <div ref={wrapperRef} className="preview-wrapper">
             <video
                 ref={videoRef}
                 autoPlay
@@ -53,6 +62,13 @@ export default function ScreenPreview({ stream }) {
                     </span>
                 )}
             </div>
+            <button
+                className="fullscreen-btn"
+                onClick={toggleFullscreen}
+                aria-label="Toggle fullscreen preview"
+            >
+                ⛶
+            </button>
         </div>
     );
 }

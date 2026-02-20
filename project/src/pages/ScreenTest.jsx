@@ -15,8 +15,6 @@ export default function ScreenTest() {
         reset();
         startSharing();
     }, [reset, startSharing]);
-
-    // Keyboard: Enter on idle triggers start — only when no interactive element is focused
     useEffect(() => {
         const INTERACTIVE = ['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'A'];
         const onKey = (e) => {

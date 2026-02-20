@@ -312,6 +312,29 @@ p {
     flex-shrink: 0;
 }
 
+/* ── Fullscreen Button ───────────────────────────────────── */
+.fullscreen-btn {
+    position: absolute;
+    bottom: .75rem;
+    right: .75rem;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    border: none;
+    padding: .35rem .55rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 10;
+    line-height: 1;
+    transition: background .15s ease, transform .15s ease;
+}
+
+.fullscreen-btn:hover {
+    background: rgba(0, 0, 0, .75);
+    transform: scale(1.1);
+}
+
 /* ── Loading Spinner ──────────────────────────────────────── */
 .spinner-row {
     display: flex;
