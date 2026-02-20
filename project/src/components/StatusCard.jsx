@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 
 const STATUS_CONFIG = {
     idle: {
@@ -47,6 +47,34 @@ export default function StatusCard({ status, error, stream }) {
     const config = STATUS_CONFIG[status] ?? { label: 'Unknown', badgeClass: '', message: '' };
     const message = config.message ?? error ?? 'An unknown error occurred.';
 
+    // 🟡 Stream Activity Visualizer — lightweight "Live since" clock
+    const startTimeRef = useRef(null);
+    const [liveSince, setLiveSince] = useState(null);
+
+    useEffect(() => {
+        if (status !== 'granted') {
+            startTimeRef.current = null;
+            setLiveSince(null);
+            return;
+        }
+
+        if (!startTimeRef.current) {
+            startTimeRef.current = new Date();
+        }
+
+        const formatTime = (date) =>
+            date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        setLiveSince(formatTime(startTimeRef.current));
+
+        const id = setInterval(() => {
+            // Keep the label ticking so the user sees it's alive
+            setLiveSince(formatTime(startTimeRef.current));
+        }, 1000);
+
+        return () => clearInterval(id);
+    }, [status]);
+
     const streamMeta = useMemo(() => {
         if (status !== 'granted' || !stream) return null;
         const track = stream.getVideoTracks()[0];
@@ -58,6 +86,9 @@ export default function StatusCard({ status, error, stream }) {
         };
     }, [status, stream]);
 
+    // 🟡 Surface Constraints — soft UX guidance instead of forced constraints
+    const showSurfaceTip = streamMeta?.surface === 'browser';
+
     return (
         <div className="status-card">
             <span className={`status-badge ${config.badgeClass}`}>{config.label}</span>
@@ -65,6 +96,9 @@ export default function StatusCard({ status, error, stream }) {
 
             {streamMeta && (
                 <div className="stream-meta">
+                    {liveSince && (
+                        <span className="meta-chip meta-chip--live">🕐 Live since {liveSince}</span>
+                    )}
                     {streamMeta.resolution && (
                         <span className="meta-chip">📐 {streamMeta.resolution}</span>
                     )}
@@ -77,6 +111,12 @@ export default function StatusCard({ status, error, stream }) {
                         <span className="meta-chip">⚡ {streamMeta.fps} fps</span>
                     )}
                 </div>
+            )}
+
+            {showSurfaceTip && (
+                <p className="surface-tip">
+                    💡 Tip: Share a different window to avoid the mirror effect.
+                </p>
             )}
         </div>
     );

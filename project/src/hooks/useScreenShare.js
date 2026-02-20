@@ -7,6 +7,10 @@ export const useScreenShare = () => {
 
     const streamRef = useRef(null);
 
+    // Ref mirrors status to avoid stale-closure reads inside async callbacks
+    const statusRef = useRef(status);
+    useEffect(() => { statusRef.current = status; }, [status]);
+
     const cleanup = useCallback(() => {
         if (streamRef.current) {
             streamRef.current.getTracks().forEach(track => {
@@ -19,6 +23,9 @@ export const useScreenShare = () => {
     }, []);
 
     const startSharing = useCallback(async () => {
+        // ⭐ Double-launch protection — prevent concurrent picker attempts
+        if (statusRef.current === "requesting") return;
+
         cleanup();
         setError(null);
 
@@ -64,6 +71,9 @@ export const useScreenShare = () => {
             } else if (err.name === "OverconstrainedError") {
                 setStatus("error");
                 setError("The requested capture constraints could not be satisfied.");
+            } else if (err.name === "SecurityError") {
+                setStatus("error");
+                setError("Screen capture blocked. Ensure the page is active and try again.");
             } else {
                 setStatus("error");
                 setError("An unexpected error occurred. Please try again.");
