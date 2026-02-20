@@ -7,7 +7,6 @@ export const useScreenShare = () => {
 
     const streamRef = useRef(null);
 
-    // Ref mirrors status to avoid stale-closure reads inside async callbacks
     const statusRef = useRef(status);
     useEffect(() => { statusRef.current = status; }, [status]);
 
@@ -23,7 +22,6 @@ export const useScreenShare = () => {
     }, []);
 
     const startSharing = useCallback(async () => {
-        // ⭐ Double-launch protection — prevent concurrent picker attempts
         if (statusRef.current === "requesting") return;
 
         cleanup();
@@ -60,9 +58,7 @@ export const useScreenShare = () => {
                 setStatus("cancelled");
                 setError("Screen selection was cancelled.");
             } else if (err.name === "NotAllowedError") {
-                // Some browsers throw NotAllowedError for both deny AND cancel.
-                // Use message heuristic: real denies mention "permission".
-                if (err.message?.toLowerCase().includes("permission")) {
+                if ((err.message || "").toLowerCase().includes("permission")) {
                     setStatus("denied");
                     setError("Permission was denied by the user or browser policy.");
                 } else {
