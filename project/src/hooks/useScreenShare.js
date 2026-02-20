@@ -60,8 +60,15 @@ export const useScreenShare = () => {
                 setStatus("cancelled");
                 setError("Screen selection was cancelled.");
             } else if (err.name === "NotAllowedError") {
-                setStatus("denied");
-                setError("Permission was denied by the user or browser policy.");
+                // Some browsers throw NotAllowedError for both deny AND cancel.
+                // Use message heuristic: real denies mention "permission".
+                if (err.message?.toLowerCase().includes("permission")) {
+                    setStatus("denied");
+                    setError("Permission was denied by the user or browser policy.");
+                } else {
+                    setStatus("cancelled");
+                    setError("Screen selection was cancelled.");
+                }
             } else if (err.name === "NotFoundError") {
                 setStatus("error");
                 setError("No suitable screen capture source was found.");

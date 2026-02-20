@@ -7,7 +7,7 @@ const STATUS_CONFIG = {
         message: 'Click "Start Capture" to begin the screen sharing test.',
     },
     requesting: {
-        label: 'Waiting for Permission…',
+        label: 'Requesting Permission…',
         badgeClass: 'requesting',
         message: 'A browser prompt has appeared. Select a screen, window, or tab to continue.',
     },
@@ -46,8 +46,6 @@ const STATUS_CONFIG = {
 export default function StatusCard({ status, error, stream }) {
     const config = STATUS_CONFIG[status] ?? { label: 'Unknown', badgeClass: '', message: '' };
     const message = config.message ?? error ?? 'An unknown error occurred.';
-
-    // 🟡 Stream Activity Visualizer — lightweight "Live since" clock
     const startTimeRef = useRef(null);
     const [liveSince, setLiveSince] = useState(null);
 
@@ -68,7 +66,6 @@ export default function StatusCard({ status, error, stream }) {
         setLiveSince(formatTime(startTimeRef.current));
 
         const id = setInterval(() => {
-            // Keep the label ticking so the user sees it's alive
             setLiveSince(formatTime(startTimeRef.current));
         }, 1000);
 
@@ -86,7 +83,6 @@ export default function StatusCard({ status, error, stream }) {
         };
     }, [status, stream]);
 
-    // 🟡 Surface Constraints — soft UX guidance instead of forced constraints
     const showSurfaceTip = streamMeta?.surface === 'browser';
 
     return (
