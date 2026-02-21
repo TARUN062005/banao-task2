@@ -73,7 +73,7 @@ export default function ScreenTest() {
                                 onClick={startSharing}
                                 aria-label="Start screen capture test"
                             >
-                                Start Capture
+                               Start Screen Test
                             </Button>
                             <Button
                                 id="btn-back-idle"
@@ -116,7 +116,7 @@ export default function ScreenTest() {
                                 onClick={handleRetry}
                                 aria-label="Retry screen capture test"
                             >
-                                Retry Test
+                                Retry Screen Test
                             </Button>
                             <Button
                                 id="btn-back"

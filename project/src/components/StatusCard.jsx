@@ -4,7 +4,7 @@ const STATUS_CONFIG = {
     idle: {
         label: 'Ready',
         badgeClass: 'neutral',
-        message: 'Click "Start Capture" to begin the screen sharing test.',
+        message: 'Click "Start Screen Test" to begin the screen sharing test.',
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
@@ -23,7 +23,7 @@ const STATUS_CONFIG = {
         ),
     },
     granted: {
-        label: 'Stream Active',
+        label: 'Screen stream active',
         badgeClass: 'active',
         message: 'Your screen is being captured locally. No data leaves your device.',
         icon: (
@@ -69,7 +69,7 @@ const STATUS_CONFIG = {
         ),
     },
     ended: {
-        label: 'Session Ended',
+        label: 'Screen sharing stopped',
         badgeClass: 'ended',
         message: 'Screen sharing has stopped. You can retry or return to the home page.',
         icon: (
