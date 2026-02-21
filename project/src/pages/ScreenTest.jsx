@@ -7,6 +7,7 @@ import StatusCard from '../components/StatusCard';
 import ScreenPreview from '../components/ScreenPreview';
 
 const RETRY_STATUSES = ['ended', 'denied', 'cancelled', 'error'];
+const ORIGINAL_TITLE = 'ScreenTest';
 
 export default function ScreenTest() {
     const navigate = useNavigate();
@@ -17,10 +18,21 @@ export default function ScreenTest() {
         setGlobalStatus(status);
     }, [status, setGlobalStatus]);
 
+    /* ── Red dot in browser tab when sharing (any surface) ── */
+    useEffect(() => {
+        if (status === 'granted') {
+            document.title = '🔴 Live — Screen Share Test';
+        } else {
+            document.title = ORIGINAL_TITLE;
+        }
+        return () => { document.title = ORIGINAL_TITLE; };
+    }, [status]);
+
     const handleRetry = useCallback(() => {
         reset();
         startSharing();
     }, [reset, startSharing]);
+
     useEffect(() => {
         const INTERACTIVE = ['BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'A'];
         const onKey = (e) => {
@@ -35,10 +47,15 @@ export default function ScreenTest() {
         return () => window.removeEventListener('keydown', onKey);
     }, [status, startSharing]);
 
+    const isLive = status === 'granted';
+
     return (
         <div className="container">
             <div className="card">
-                <h2>Screen Share Test</h2>
+                <h2 className="screen-test-heading">
+                    {isLive && <span className="recording-dot" aria-label="Recording active" />}
+                    Screen Share Test
+                </h2>
 
                 <StatusCard status={status} error={error} stream={stream} />
 
