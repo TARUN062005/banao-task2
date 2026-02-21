@@ -787,7 +787,7 @@ kbd {
 .hero-badge-dot {
     width: 6px;
     height: 6px;
-    background: var(--blue);
+    background: #ef4444;
     border-radius: 50%;
     animation: pulse 2s infinite;
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useScreenShare } from '../hooks/useScreenShare';
+import { useScreenShareStatus } from '../contexts/ScreenShareContext';
 import Button from '../components/Button';
 import StatusCard from '../components/StatusCard';
 import ScreenPreview from '../components/ScreenPreview';
@@ -10,6 +11,11 @@ const RETRY_STATUSES = ['ended', 'denied', 'cancelled', 'error'];
 export default function ScreenTest() {
     const navigate = useNavigate();
     const { stream, status, error, startSharing, stopSharing, reset } = useScreenShare();
+    const { setStatus: setGlobalStatus } = useScreenShareStatus();
+
+    useEffect(() => {
+        setGlobalStatus(status);
+    }, [status, setGlobalStatus]);
 
     const handleRetry = useCallback(() => {
         reset();

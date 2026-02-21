@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuthUser, logoutUser } from '../auth/auth';
+import { useScreenShareStatus } from '../contexts/ScreenShareContext';
 import Button from '../components/Button';
 
 const FEATURES = [
@@ -60,6 +61,7 @@ export default function Home() {
     const [isSupported, setIsSupported] = useState(true);
     const [authUser, setAuthUser] = useState(null);
     const [theme, setTheme] = useState(getStoredTheme);
+    const { status } = useScreenShareStatus();
 
     useEffect(() => {
         setIsSupported(!!navigator.mediaDevices?.getDisplayMedia);
@@ -92,6 +94,7 @@ export default function Home() {
                             <line x1="12" y1="17" x2="12" y2="21" />
                         </svg>
                         <span>ScreenTest</span>
+                        {status === 'granted' && <span className="hero-badge-dot" aria-hidden="true" />}
                     </a>
                     <div className="home-nav-actions">
                         {/* Theme Toggle */}

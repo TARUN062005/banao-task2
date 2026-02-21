@@ -99,18 +99,5 @@ export const useScreenShare = () => {
         return cleanup;
     }, [cleanup]);
 
-    // Update browser tab title with red dot while sharing
-    useEffect(() => {
-        const originalTitle = document.title.replace(/^🔴 /, '');
-        if (status === 'granted') {
-            document.title = `🔴 ${originalTitle}`;
-        } else {
-            document.title = originalTitle;
-        }
-        return () => {
-            document.title = originalTitle;
-        };
-    }, [status]);
-
     return { stream, status, error, startSharing, stopSharing, reset };
 };
